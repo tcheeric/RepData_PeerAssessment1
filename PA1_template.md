@@ -5,6 +5,10 @@ Eric Tchepannou
 ## Loading and preprocessing the data
 
 
+```r
+library(dplyr)
+```
+
 ```
 ## 
 ## Attaching package: 'dplyr'
@@ -16,6 +20,12 @@ Eric Tchepannou
 ## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union
+```
+
+```r
+library(ggplot2)
+
+data <- read.csv(file = "activity.csv", sep = ",")
 ```
 
 ## What is mean total number of steps taken per day?
@@ -52,6 +62,17 @@ head(total_steps_per_day)
 
 ### If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day
 
+
+```r
+g <- ggplot(total_steps_per_day, aes(x = Group.1, y = x)) +
+        geom_histogram(stat = "identity") +
+        labs(x = "Interval",
+             y = "Total number of steps",
+             title = "Total number of steps taken each day")
+
+
+print(g);
+```
 
 ```
 ## Warning in loop_apply(n, do.ply): Removed 8 rows containing missing values
@@ -117,6 +138,19 @@ head(median_steps_per_day)
 
 ### Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
+
+```r
+mean_steps_per_intv <- aggregate(data$steps, by=list(data$interval), FUN=mean, na.rm = T)
+
+g <- ggplot(mean_steps_per_intv, aes(x = Group.1, y = x)) +
+        geom_line() +
+        labs(x = "Interval",
+             y = "Average number of steps taken",
+             title = "Average daily activity pattern")
+
+print(g)
+```
+
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
 ### Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
@@ -179,6 +213,19 @@ head(new_data)
 ```
 
 ### Make a histogram of the total number of steps taken each day
+
+```r
+new_total_steps_per_day <- aggregate(new_data$new_steps, by = list(new_data$date), FUN = sum, na.rm = T)
+g <- ggplot(new_total_steps_per_day, aes(x = Group.1, y = x)) +
+        geom_histogram(stat = "identity") +        
+        labs(x = "Interval",
+             y = "Total number of steps",
+             title = "Total number of steps taken each day")
+
+
+print(g);
+```
+
 ![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
 
 Calculate and report the mean and median total number of steps taken per day
@@ -267,6 +314,21 @@ head(day_data)
 ## 4    NA 2012-10-01       15 0.1509434 weekday
 ## 5    NA 2012-10-01       20 0.0754717 weekday
 ## 6    NA 2012-10-01       25 2.0943396 weekday
+```
+
+
+```r
+agg_day_data <- aggregate(day_data$steps, by=list(day_data$interval, day_data$day), mean, na.rm = T)
+
+g <- ggplot(agg_day_data, aes(x = Group.1, y = x)) +
+        geom_line() +
+        geom_smooth(method = "lm") +
+        facet_grid(facets = . ~ Group.2) +
+        labs(x = "5-minute interval",
+             y = "Average number of steps taken",
+             title="Activity patterns between weekdays and weekends")
+
+print(g)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 

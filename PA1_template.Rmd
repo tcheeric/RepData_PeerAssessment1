@@ -13,7 +13,7 @@ output:
 
 ## Loading and preprocessing the data
 
-```{r echo=FALSE}
+```{r}
 library(dplyr)
 library(ggplot2)
 
@@ -34,7 +34,7 @@ head(total_steps_per_day)
 
 ### If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day
 
-```{r, echo=FALSE}
+```{r}
 g <- ggplot(total_steps_per_day, aes(x = Group.1, y = x)) +
         geom_histogram(stat = "identity") +
         labs(x = "Interval",
@@ -61,7 +61,7 @@ head(median_steps_per_day)
 
 ### Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-```{r, echo=FALSE}
+```{r}
 mean_steps_per_intv <- aggregate(data$steps, by=list(data$interval), FUN=mean, na.rm = T)
 
 g <- ggplot(mean_steps_per_intv, aes(x = Group.1, y = x)) +
@@ -100,7 +100,7 @@ head(new_data)
 ```
 
 ### Make a histogram of the total number of steps taken each day
-``` {r echo=FALSE}
+``` {r}
 new_total_steps_per_day <- aggregate(new_data$new_steps, by = list(new_data$date), FUN = sum, na.rm = T)
 g <- ggplot(new_total_steps_per_day, aes(x = Group.1, y = x)) +
         geom_histogram(stat = "identity") +        
@@ -135,7 +135,7 @@ str(day_data)
 head(day_data)
 ```
 
-```{r echo=FALSE}
+```{r}
 agg_day_data <- aggregate(day_data$steps, by=list(day_data$interval, day_data$day), mean, na.rm = T)
 
 g <- ggplot(agg_day_data, aes(x = Group.1, y = x)) +
